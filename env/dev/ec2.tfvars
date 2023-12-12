@@ -1,8 +1,5 @@
 
-# ec2_name_1 = "node_1"
-# ec2_name_2= "node_2"
-
-sg_name = "kay_sg"
+sg_name = "hr-app-sg"
 RDS_PASSWORD = "kits-hr-app"
 RDS_USERNAME = "hrapprds"
 

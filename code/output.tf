@@ -4,7 +4,7 @@ output "ec2_dev_public_ip_1" {
 
 
 output "ec2_dev_public_ip_2" {
-  value = var.env == "dev" ? aws_instance.Node-Two.public_ip : "not required"
+  value = var.env == "sit" ? aws_instance.Node-Two.public_ip : "not required"
 }
 
 # output "ec2_sit_public_ip_2" {
