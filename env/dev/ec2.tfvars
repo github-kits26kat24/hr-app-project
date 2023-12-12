@@ -6,7 +6,7 @@ sg_name = "kay_sg"
 RDS_PASSWORD = "kits-hr-app"
 RDS_USERNAME = "hrapprds"
 
-ec2_ami = "ami-04f7efe62f419d9f5"
+ec2_ami = "ami-07355fe79b493752d"
 ec2_instance_type = "t2.micro"
 ec2_key_name   = "Kitskat2023"
 env = "dev"
