@@ -1,8 +1,9 @@
-output "ec2_dev_public_ip" {
+output "ec2_dev_public_ip_1" {
   value = var.env == "dev" ? aws_instance.Node-One.public_ip : "not required"
 }
 
-output "ec2_dev_public_ip_1" {
+
+output "ec2_dev_public_ip_2" {
   value = var.env == "dev" ? aws_instance.Node-Two.public_ip : "not required"
 }
 
