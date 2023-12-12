@@ -8,7 +8,7 @@
 resource "aws_security_group" "hr-app-sg" {
   name        = var.sg_name
   description = "Allow SSH and HTTP Connection"
-  vpc_id      = aws_vpc.test5b.id
+  vpc_id      = aws_vpc.hr-app.id
 
   ingress {
     description = "SSH from VPC"

@@ -1,2 +1,2 @@
-# bucket = "kits-hr-app" # "terraform.tfstate"
+# bucket = "hr-app-project-bucket" # "terraform.tfstate"
 # key = "sit/terraform.tfstate"

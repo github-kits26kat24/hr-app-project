@@ -70,7 +70,7 @@ variable "dev_default_tags_2" {
 variable "bucket" {
   description = "This is a variable to manage ec2 bucket name"
   type        = string
-  default     = "kits-hr-app"
+  default     = "hr-app-project-bucket"
 }
 
 variable "RDS_PASSWORD" {

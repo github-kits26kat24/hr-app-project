@@ -1,7 +1,7 @@
 resource "aws_db_subnet_group" "hr-app" {
   name        = "hr-app"
   description = "RDS subnet group"
-  subnet_ids  = [aws_subnet.public_1.id, aws_subnet.private.id]
+  subnet_ids  = [aws_subnet.Node-One.id, aws_subnet.Node-Two.id]
 }
 resource "aws_db_parameter_group" "hr-app-pg" {
   name   = "hr-app-parameter"
