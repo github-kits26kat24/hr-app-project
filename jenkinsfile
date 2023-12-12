@@ -18,6 +18,7 @@ pipeline {
                 sh "git clone https://github.com/github-kits26kat24/Test5B.git"
             }
         }
+
         stage('terraform validate') {
             steps {
                 sh '''
@@ -92,16 +93,16 @@ pipeline {
             }
         }
 
-        stage('Terraform Init and Destroy') {
-            steps {
-                sh """
-                    cd Test5B/Code
-                    echo 'about to perform terraform destroy'
-                    terraform init
-                    terraform destroy --auto-approve
-                """
-            } 
-        }   
+        // stage('Terraform Init and Destroy') {
+        //     steps {
+        //         sh """
+        //             cd Test5B/Code
+        //             echo 'about to perform terraform destroy'
+        //             terraform init
+        //             terraform destroy --auto-approve
+        //         """
+        //     } 
+        // }   
     }  
     
         post {
