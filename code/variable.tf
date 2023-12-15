@@ -73,10 +73,16 @@ variable "bucket" {
   default     = "hr-app-project-bucket"
 }
 
+variable "key" {
+  description = "This is a variable to manage ec2 bucket name"
+  type        = string
+  default     = "dev/terraform.tfstate"
+}
+
 variable "RDS_PASSWORD" {
   description = "This is a variable to manage ec2 sit_public_ip_3 name"
   type        = string
-  default     = "kits26kat2486"
+  default     = "kitskat2023"
 }
 
 variable "RDS_USERNAME" {
@@ -105,11 +111,4 @@ variable "RDS_USERNAME" {
 #   description = "This is a variable to manage ec2 env name"
 #   type        = string
 #   default     = "dev"
-# }
-
-
-# variable "key" {
-#   description = "This is a variable to manage ec2 bucket name"
-#   type        = string
-#   default     = "dev/terraform.tfstate"
 # }

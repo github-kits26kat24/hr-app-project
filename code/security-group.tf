@@ -9,7 +9,6 @@ resource "aws_security_group" "hr-app-sg" {
   name        = var.sg_name
   description = "Allow SSH and HTTP Connection"
   vpc_id      = aws_vpc.hr-app.id
-
   ingress {
     description = "SSH from VPC"
     from_port   = 22 //ssh always connect on port 22
@@ -34,7 +33,7 @@ resource "aws_security_group" "hr-app-sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
- ingress {
+  ingress {
     description = "HTTP from VPC"
     from_port   = 5432 //Http always connect from port 80
     to_port     = 5432

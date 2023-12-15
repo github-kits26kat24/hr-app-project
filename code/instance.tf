@@ -7,8 +7,8 @@ resource "aws_instance" "Node-One" {
   vpc_security_group_ids = [aws_security_group.hr-app-sg.id]
   tags                   = var.dev_default_tags_1 # var.ec2_name_1
 }
-resource "aws_instance" "Node-Two" {
 
+resource "aws_instance" "Node-Two" {
   ami                    = var.ec2_ami
   instance_type          = var.ec2_instance_type
   key_name               = var.ec2_key_name
