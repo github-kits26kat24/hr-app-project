@@ -1,120 +1,35 @@
+ pipeline {
+    agent any 
 
-pipeline {
-    agent any
-    
-    parameters {
-        choice(name: "TARGET_Env", choices: ["dev", "sit"], description: "Target Deployment Environment")
-    }
-
-    environment {
-        AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
-        AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
-        AWS_REGION = 'eu-west-1'
-    }
-    
     stages {
-        stage("download code and env config") {
-            steps {
-                sh "git clone https://github.com/github-kits26kat24/Test5B.git"
+        stage ('download and run') {
+            environment  {
+                ANSIBLE_HOST_KEY_CHECKING = 'False'
+            }
+            steps { 
+                ansiblePlaybook(
+                    credentialsId: 'SSH_AGENT_CONNECT', 
+                    inventory: 'inventories/dev', 
+                    playbook: 'playbook.yml'
+                )
             }
         }
-
-        stage('terraform validate') {
-            steps {
-                sh '''
-                    cd Test5B/Code
-                    echo 'about to perform code validation'
-                    terraform init --backend-config=../Env/"${TARGET_Env}"/backend.tfvars
-                    terraform validate
-                '''
+            stage ('web deploy') {
+            environment  {
+                ANSIBLE_HOST_KEY_CHECKING = 'False'
+            }
+            steps { 
+                ansiblePlaybook(
+                    credentialsId: 'SSH_AGENT_CONNECT', 
+                    inventory: 'inventories/dev', 
+                    playbook: 'webdeploy.yml'
+                )
             }
         }
-
-        stage('implement plan') {
-            steps {
-                sh '''
-                    cd Test5B/Code
-                    echo 'about to perform terraform plan'
-                    terraform plan --var-file ../Env/"${TARGET_Env}"/backend.tfvars --var-file ../Env/"${TARGET_Env}"/ec2.tfvars
-                    terraform plan
-                '''
-            }
-        }
-
-    stage ('terraform deploy') {
-             options {
-                timeout (time: 2, unit: 'MINUTES')
-            }
-
-            steps  {
-                input (message : "Happy to deploy?")
-                echo 'would have deploy'
-            }
-        }
-
-        stage('implemention step') {
-            steps {
-                script {
-                    env.NEXT_STEP = input message: 'Implement apply?', ok: 'Implement',
-                    parameters: [choice(name: 'Implement', choices: ['apply', 'destroy', 'do nothing'], description: 'implementation stage')]
-                    
-                    if (env.NEXT_STEP == 'apply') {
-                        sh '''
-                            cd Test5B/Code
-                            echo 'about to perform terraform apply'
-                            terraform apply --var-file ../Env/"${TARGET_Env}"/backend.tfvars --var-file ../Env/"${TARGET_Env}"/ec2.tfvars --auto-approve
-                        '''
-                    } else if (env.NEXT_STEP == 'destroy') {
-                        sh '''
-                            cd Test5B/Code
-                            echo 'about to perform terraform destroy'
-                            terraform destroy --var-file ../Env/"${TARGET_Env}"/backend.tfvars --var-file ../Env/"${TARGET_Env}"/ec2.tfvars --auto-approve
-                        '''
-                    }
-                }
-            }
-        }
-
-        stage('Delete RDS Snapshot') {
-            steps {
-                script {
-                    def snapshotIdentifier = "mariadb-final-snapshot" // Replace with the actual snapshot identifier
-
-                    def deleteSnapshotCmd = "aws rds delete-db-snapshot --db-snapshot-identifier ${snapshotIdentifier}"
-
-                    def deleteSnapshotResult = sh(script: deleteSnapshotCmd, returnStatus: true)
-
-                    if (deleteSnapshotResult == 0) {
-                        echo "Snapshot ${snapshotIdentifier} deleted successfully."
-                    } else {
-                        error "Failed to delete snapshot ${snapshotIdentifier}."
-                    }
-                }
-            }
-        }
-
-        // stage('Terraform Init and Destroy') {
-        //     steps {
-        //         sh """
-        //             cd Test5B/Code
-        //             echo 'about to perform terraform destroy'
-        //             terraform init
-        //             terraform destroy --auto-approve
-        //         """
-        //     } 
-        // }   
-    }  
-    
-        post {
-            always  {
-            echo ' i just ran a pipleine'
+    }
+    post {
+        always {
             deleteDir()
-            }
-            success {
-            echo 'pipleine ran successfully'
-            }
-        failure {
-            echo 'pipleine ran failed'
         }
     }
 }

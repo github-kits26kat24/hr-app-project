@@ -23,17 +23,16 @@ variable "sg_name" {
   default     = "hr-app-sg"
 }
 
-
 variable "subnet" {
   description = "This is a variable to manage ec2 key name"
   type        = list(any)
-  default     = ["10.0.1.0/24", "10.0.2.0/24"]
+  default     = ["10.0.1.0/24", "10.0.2.0/24", "10.0.2.0/24"]
 }
 
 variable "availability_zone" {
   description = "This is a variable to manage ec2 key name"
   type        = list(any)
-  default     = ["eu-west-1a", "eu-west-1b"]
+  default     = ["eu-west-1a", "eu-west-1b", "eu-west-1b"]
 }
 
 variable "ec2_dev_public_ip_1" {
@@ -45,6 +44,12 @@ variable "ec2_dev_public_ip_2" {
   description = "This is a variable to manage ec2 dev_public_ip_2 name"
   type        = string
   default     = "aws_instance.Node-Two.public_ip"
+}
+
+variable "ec2_dev_public_ip_3" {
+  description = "This is a variable to manage ec2 dev_public_ip_3 name"
+  type        = string
+  default     = "aws_instance.Monitoring-Machine.public_ip"
 }
 
 variable "dev_default_tags_1" {
@@ -63,6 +68,15 @@ variable "dev_default_tags_2" {
   default = {
     "Name"        = "Node_Two"
     "Dept"        = "Finance-Node-Two"
+    "can destroy" = "yes"
+  }
+}
+variable "dev_default_tags_3" {
+  description = "This variable is declared here to manage ec2 tags"
+  type        = map(any)
+  default = {
+    "Name"        = "Monitoring-Machine"
+    "Dept"        = "DataBase-Node-Three"
     "can destroy" = "yes"
   }
 }

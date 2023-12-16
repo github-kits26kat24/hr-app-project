@@ -1,7 +1,7 @@
 # create the subnet group for the rds instance
 resource "aws_db_subnet_group" "hr-app_subnet_group" {
   name        = "hr-app-database_subnets"
-  subnet_ids  = [aws_subnet.Node-One.id, aws_subnet.Node-Two.id]
+  subnet_ids  = [aws_subnet.Node-One.id, aws_subnet.Node-Two.id, aws_subnet.Monitoring-Machine.id]
   description = "subnet for database instance"
   tags = {
     Name = "hr-app-database_subnets"
