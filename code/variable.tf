@@ -35,6 +35,12 @@ variable "availability_zone" {
   default     = ["eu-west-1a", "eu-west-1b", "eu-west-1b"]
 }
 
+variable "availability_zones" {
+  description = "This is a variable to manage RDS name"
+  type        = list(string)
+  default     = ["eu-west-1a", "eu-west-1b", "eu-west-1c"]
+}
+
 variable "ec2_dev_public_ip_1" {
   description = "This is a variable to manage ec2 dev_public_ip_1 name"
   type        = string
