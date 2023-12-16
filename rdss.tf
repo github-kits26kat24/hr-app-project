@@ -32,3 +32,12 @@ resource "aws_db_instance" "hr-app-db_instance" {
 # data.aws_availability_zones.available_zones.names[0]
 
 # terraform apply -var="availability_zones=[\"eu-west-1a\", \"eu-west-1b\", \"eu-west-1c\"]"
+
+# docker run -d -p 80:5000 \
+#     -e POSTGRES_HOST=hr-app-project.cku7q07sw3mp.eu-west-1.rds.amazonaws.com \
+#     -e POSTGRES_USER=kitskatrds \
+#     -e POSTGRES_PASSWORD=kitskat2023 \
+#     -e POSTGRES_DATABASE_NAME=hr-app-project \
+#     -e TO_ADDRESS=kay.tijani@gmail.com \
+#     -e SOURCE_ADDRESS=k.tijani0@hotmail.com \
+#     hrapp:v05
