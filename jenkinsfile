@@ -27,7 +27,7 @@ pipeline {
        stage ("build image") {
          steps {
             sh '''
-                  cd HR-APP-PROJECT
+                  cd hr-app-project
                   docker build -t kitskat/hr-app-project:$version .
                '''   
          }
