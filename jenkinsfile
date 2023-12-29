@@ -4,7 +4,6 @@ pipeline {
     environment {
         myuser = credentials ('dockerhub-user')
         mypassword = credentials ('dockerhub-password')
-
         POSTGRES_HOST = credentials ('POSTGRES_HOST')
         POSTGRES_PASSWORD = credentials ('POSTGRES_PASSWORD')
         AWS_ACCESS_KEY_ID = credentials ('AWS_ACCESS_KEY_ID')
@@ -18,7 +17,6 @@ pipeline {
          steps {
             sh '''
             git clone https://github.com/github-kits26kat24/hr-app-project.git
-           
             '''
          }
        }
@@ -28,7 +26,7 @@ pipeline {
             sh '''
                   cd hr-app-project
                   docker build -t kitskat/hrrapp:$version .
-               ''' || error "Failed to build Docker image"  
+               ''' 
          }
        }
 
