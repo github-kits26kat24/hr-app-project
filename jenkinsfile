@@ -30,7 +30,7 @@ pipeline {
             steps {
                 script {
                     try {
-                        sh "cd hr-app-project && docker build -t kitskat/hrrapp:$version ."
+                        sh "cd hr-app-project && docker build -t kitskat/hr-app-project:$version ."
                     } catch (Exception e) {
                         error "Failed to build Docker image: ${e.message}"
                     }
@@ -43,7 +43,7 @@ pipeline {
                 script {
                     try {
                         sh "docker login -u $myuser -p $mypassword"
-                        sh "docker push kitskat/hrrapp:$version"
+                        sh "docker push kitskat/hr-app-project:$version"
                     } catch (Exception e) {
                         error "Failed to publish Docker image: ${e.message}"
                     }
@@ -56,7 +56,7 @@ pipeline {
                 script {
                     try {
                         sh "ls"
-                        sh "docker run --name hr-app-project-01 --rm -d -p 80:5000 kitskat/hrrapp:$version"
+                        sh "docker run --name hr-app-project-01 --rm -d -p 80:5000 kitskat/hr-app-project:$version"
                     } catch (Exception e) {
                         error "Failed to run Docker image: ${e.message}"
                     }
