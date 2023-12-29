@@ -28,8 +28,7 @@ pipeline {
          steps {
             sh '''
                   cd hr-app-project
-                  ls
-                  sudo docker build -t kitskat/hrrapp:v2 .
+                  sudo docker build -t kitskat/hrrapp:$version .
                '''   
          }
        }
@@ -38,7 +37,7 @@ pipeline {
          steps {
             sh '''
                   docker login -u $myuser -p $mypassword
-                  docker push kitskat/hrrapp:v2
+                  docker push kitskat/hrrapp:$version
                 '''
          }
        }       
@@ -47,7 +46,7 @@ pipeline {
          steps {
             sh '''
                ls
-                 docker run --name hr-app-project-01  --rm -d -p 80:5000 kitskat/hrrapp:v2
+                 docker run --name hr-app-project-01  --rm -d -p 80:5000 kitskat/hrrapp:$version
                '''
          }
        }
