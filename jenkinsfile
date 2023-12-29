@@ -29,7 +29,7 @@ pipeline {
             sh '''
                   cd hr-app-project
                   ls
-                  docker build -t kitskat/hrrapp:v2 .
+                  sudo docker build -t kitskat/hrrapp:v2 .
                '''   
          }
        }
