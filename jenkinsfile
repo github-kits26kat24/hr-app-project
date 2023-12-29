@@ -28,7 +28,7 @@ pipeline {
          steps {
             sh '''
                   cd hr-app-project
-                  sudo docker build -t kitskat/hrrapp:$version .
+                  docker build -t kitskat/hrrapp:$version .
                '''   
          }
        }
