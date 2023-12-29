@@ -28,6 +28,7 @@ pipeline {
          steps {
             sh '''
                   cd hr-app-project
+                  ls
                   docker build -t kitskat/hrrapp:v2 .
                '''   
          }
