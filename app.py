@@ -22,7 +22,7 @@ db = SQLAlchemy(app)
 
 client = boto3.client(
     'ses', 
-    region_name= os.environ.get("AWS_REGION_NAME"),
+    region_name= os.environ.get("eu-west-1"),
     aws_access_key_id = os.environ.get("AWS_ACCESS_NAME"),
     aws_secret_access_key = os.environ.get("AWS_KEY_NAME")
 )
