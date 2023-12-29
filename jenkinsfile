@@ -2,73 +2,90 @@ pipeline {
     agent any
     
     environment {
-        myuser = credentials ('dockerhub-user')
-        mypassword = credentials ('dockerhub-password')
+        myuser = credentials('dockerhub-user')
+        mypassword = credentials('dockerhub-password')
 
-        POSTGRES_HOST = credentials ('POSTGRES_HOST')
-        POSTGRES_PASSWORD = credentials ('POSTGRES_PASSWORD')
-        AWS_ACCESS_KEY_ID = credentials ('AWS_ACCESS_KEY_ID')
-        AWS_SECRET_ACCESS_KEY = credentials ('AWS_SECRET_ACCESS_KEY')
+        POSTGRES_HOST = credentials('POSTGRES_HOST')
+        POSTGRES_PASSWORD = credentials('POSTGRES_PASSWORD')
+        AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
+        AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
         version = "v2"
-        keyfile = credentials ('keyfile')
+        keyfile = credentials('keyfile')
     }
     
     stages {
-      stage ("download code") {
-        steps {
-           sh '''
-            git clone https://github.com/github-kits26kat24/hr-app-project.git
-            '''
-         }
-       }
-    
+        stage("Download code") {
+            steps {
+                script {
+                    try {
+                        sh 'git clone https://github.com/github-kits26kat24/hr-app-project.git'
+                    } catch (Exception e) {
+                        error "Failed to clone the repository: ${e.message}"
+                    }
+                }
+            }
+        }
 
+        stage("Build image") {
+            steps {
+                script {
+                    try {
+                        sh "cd hr-app-project && docker build -t kitskat/hrrapp:$version ."
+                    } catch (Exception e) {
+                        error "Failed to build Docker image: ${e.message}"
+                    }
+                }
+            }
+        }
 
-      stage ("build image") {
-        steps {
-           sh '''
-               cd hr-app-project
-               docker build -t kitskat/hrrapp:$version .
-               ''' 
-         }
-       }
+        stage("Publish image") {
+            steps {
+                script {
+                    try {
+                        sh "docker login -u $myuser -p $mypassword"
+                        sh "docker push kitskat/hrrapp:$version"
+                    } catch (Exception e) {
+                        error "Failed to publish Docker image: ${e.message}"
+                    }
+                }
+            }
+        }
 
-      stage ("publish image") {
-        steps {
-           sh '''
-               docker login -u $myuser -p $mypassword
-               docker push kitskat/hrrapp:$version
-              '''
-         }
-       }       
-    
-      stage ("run image") {
-        steps {
-           sh '''
-               ls
-               docker run --name hr-app-project-01  --rm -d -p 80:5000 kitskat/hrrapp:$version
-               '''
-         }
-       }
-           
-    
-      stage ("Run ansible") {
-        steps {
-           sh '''
-               cd HR-APP-PROJECT
-               cd ansible-home
-               pwd 
-               ls
-               ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -i inventory --key-file $keyfile playbook.yml -u ec2-user
-               # ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -i inventory  --key-file $keyfile playbookA.yml -u ec2-user 
-               '''
-         }
-       }
+        stage("Run image") {
+            steps {
+                script {
+                    try {
+                        sh "ls"
+                        sh "docker run --name hr-app-project-01 --rm -d -p 80:5000 kitskat/hrrapp:$version"
+                    } catch (Exception e) {
+                        error "Failed to run Docker image: ${e.message}"
+                    }
+                }
+            }
+        }
 
+        stage("Run Ansible") {
+            steps {
+                script {
+                    try {
+                        sh """
+                            cd HR-APP-PROJECT
+                            cd ansible-home
+                            pwd 
+                            ls
+                            ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -i inventory --key-file $keyfile playbook.yml -u ec2-user
+                            # ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -i inventory --key-file $keyfile playbookA.yml -u ec2-user 
+                        """
+                    } catch (Exception e) {
+                        error "Failed to run Ansible playbook: ${e.message}"
+                    }
+                }
+            }
+        }
     }
 
     post {
-       always {
+        always {
             deleteDir()
         }
     }
