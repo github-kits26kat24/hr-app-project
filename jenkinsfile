@@ -2,12 +2,8 @@ pipeline {
     agent any
     
     environment {
-      // ... other environment variables ...
-
-        // Use Jenkins credentials for Docker Hub
-        DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials-id')
-        // myuser = credentials ('dockerhub-user')
-        // mypassword = credentials ('dockerhub-password')
+        myuser = credentials ('dockerhub-user')
+        mypassword = credentials ('dockerhub-password')
 
         POSTGRES_HOST = credentials ('POSTGRES_HOST')
         POSTGRES_PASSWORD = credentials ('POSTGRES_PASSWORD')
@@ -38,27 +34,12 @@ pipeline {
 
        stage ("publish image") {
          steps {
-            script {
-                // Use Jenkins credentials for Docker Hub
-                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'DOCKERHUB_CREDENTIALS', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD']]) {
-                    // Log in to Docker Hub
-                    sh "docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD"
-                    
-                    // Push the Docker image
-                    sh "docker push kitskat/hrrapp:$version"
-                }
-            }
+            sh '''
+                  docker login -u $myuser -p $mypassword
+                  docker push kitskat/hrrapp:$version
+                '''
          }
-       }
-
-      //  stage ("publish image") {
-      //    steps {
-      //       sh '''
-      //             docker login -u $myuser -p $mypassword
-      //             docker push kitskat/hrrapp:$version
-      //           '''
-      //    }
-      //  }       
+       }       
     
        stage ("run image") {
          steps {
