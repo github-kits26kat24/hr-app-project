@@ -4,6 +4,7 @@ pipeline {
     environment {
         myuser = credentials ('dockerhub-user')
         mypassword = credentials ('dockerhub-password')
+
         POSTGRES_HOST = credentials ('POSTGRES_HOST')
         POSTGRES_PASSWORD = credentials ('POSTGRES_PASSWORD')
         AWS_ACCESS_KEY_ID = credentials ('AWS_ACCESS_KEY_ID')
@@ -13,51 +14,53 @@ pipeline {
     }
     
     stages {
-       stage ("download code") {
-         steps {
-            sh '''
+      stage ("download code") {
+        steps {
+           sh '''
             git clone https://github.com/github-kits26kat24/hr-app-project.git
             '''
          }
        }
     
-       stage ("build image") {
-         steps {
-            sh '''
-                  cd hr-app-project
-                  docker build -t kitskat/hrrapp:$version .
+
+
+      stage ("build image") {
+        steps {
+           sh '''
+               cd hr-app-project
+               docker build -t kitskat/hrrapp:$version .
                ''' 
          }
        }
 
-       stage ("publish image") {
-         steps {
-            sh '''
-                  docker login -u $myuser -p $mypassword
-                  docker push kitskat/hrrapp:$version
-                '''
+      stage ("publish image") {
+        steps {
+           sh '''
+               docker login -u $myuser -p $mypassword
+               docker push kitskat/hrrapp:$version
+              '''
          }
        }       
     
-       stage ("run image") {
-         steps {
-            sh '''
+      stage ("run image") {
+        steps {
+           sh '''
                ls
-                 docker run --name hr-app-project-01  --rm -d -p 80:5000 kitskat/hrrapp:$version
+               docker run --name hr-app-project-01  --rm -d -p 80:5000 kitskat/hrrapp:$version
                '''
          }
        }
            
     
-       stage ("Run ansible") {
-         steps {
-            sh '''
-                 cd HR-APP-PROJECT
-                 cd ansible-home
-                 pwd 
-                 ls
-                 ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -i inventory --key-file $keyfile playbook.yml -u ec2-user
-                 # ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -i inventory  --key-file $keyfile playbookA.yml -u ec2-user 
+      stage ("Run ansible") {
+        steps {
+           sh '''
+               cd HR-APP-PROJECT
+               cd ansible-home
+               pwd 
+               ls
+               ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -i inventory --key-file $keyfile playbook.yml -u ec2-user
+               # ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -i inventory  --key-file $keyfile playbookA.yml -u ec2-user 
                '''
          }
        }
@@ -65,7 +68,7 @@ pipeline {
     }
 
     post {
-        always {
+       always {
             deleteDir()
         }
     }
