@@ -9,7 +9,7 @@ pipeline {
         POSTGRES_PASSWORD = credentials ('POSTGRES_PASSWORD')
         AWS_ACCESS_KEY_ID = credentials ('AWS_ACCESS_KEY_ID')
         AWS_SECRET_ACCESS_KEY = credentials ('AWS_SECRET_ACCESS_KEY')
-        version = "v3"
+        version = "v2"
         keyfile = credentials ('keyfile')
 
     }
@@ -28,7 +28,7 @@ pipeline {
          steps {
             sh '''
                   cd hr-app-project
-                  docker build -t kitskat/hrapp:v3 .
+                  docker build -t kitskat/hrrapp:v2 .
                '''   
          }
        }
@@ -37,16 +37,16 @@ pipeline {
          steps {
             sh '''
                   docker login -u $myuser -p $mypassword
-                  docker push kitskat/hrapp:v3
+                  docker push kitskat/hrrapp:v2
                 '''
          }
        }       
     
-       stage ("Build image") {
+       stage ("run image") {
          steps {
             sh '''
                ls
-                 docker run --name hr-app-project-01  --rm -d -p 5000:5000 kitskat/hrapp:v3
+                 docker run --name hr-app-project-01  --rm -d -p 80:5000 kitskat/hrrapp:v2
                '''
          }
        }

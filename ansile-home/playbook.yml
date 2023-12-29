@@ -57,6 +57,5 @@
 
 
     - name: running HRAPP docker instance
-      ansible.builtin.command: docker run -d -p 80:5000 -e POSTGRES_HOST=hr-app-project.cku7q07sw3mp.eu-west-1.rds.amazonaws.com -e POSTGRES_USER=kitskatrds -e POSTGRES_PASSWORD=kitskat2023 -e POSTGRES_DATABASE_NAME=postgres -e TO_ADDRESS=kay.tijani@gmail.com  -e SOURCE_ADDRESS=k.tijani0@hotmail.com hrapp:v05
-     
+      ansible.builtin.command: docker run -d -p 80:5000 -e POSTGRES_HOST=hr-app-project.cku7q07sw3mp.eu-west-1.rds.amazonaws.com -e POSTGRES_USER=kitskatrds -e POSTGRES_PASSWORD=kitskat2023 -e POSTGRES_DATABASE_NAME=postgres -e TO_ADDRESS=kay.tijani@gmail.com  -e SOURCE_ADDRESS=k.tijani0@hotmail.com kitskat/hrrapp:v1
 

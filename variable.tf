@@ -2,7 +2,7 @@
 variable "ec2_ami" {
   description = "This is a variable to manage ec2 AMI type"
   type        = string
-  default     = "ami-07355fe79b493752d"
+  default     = "ami-02cad064a29d4550c"
 }
 
 variable "ec2_instance_type" {
